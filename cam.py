@@ -9,10 +9,12 @@ from mediapipe.tasks.python import vision
 # set HEADLESS=1 in the environment to run without a display (e.g. as a systemd service on a Pi with no monitor)
 HEADLESS = os.environ.get("HEADLESS") == "1"
 
-# init camera
+# init camera -- CAP_DSHOW opens the built-in laptop webcam faster/more reliably on Windows than the default backend
 execution_path = os.getcwd()
-camera = cv2.VideoCapture(0)
-
+camera = cv2.VideoCapture(0, cv2.CAP_DSHOW) if os.name == "nt" else cv2.VideoCapture(0)
+if not camera.isOpened():
+    raise RuntimeError("Could not open webcam (index 0). Check that no other app is using it and that it's enabled in Windows camera privacy settings.")
+ 
 # Arduino serial connection -- change ARDUINO_PORT to match your machine (Windows: "COM3", "COM4", etc.;
 # check Arduino IDE > Tools > Port, or Device Manager > Ports (COM & LPT))
 ARDUINO_PORT = "COM3"
