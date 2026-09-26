@@ -1,0 +1,25 @@
+# systemd service: starts camPi.py automatically at boot and restarts it if it crashes.
+# Install on the Pi:
+#   sudo cp ~/cam/campi.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now campi
+# Logs:  journalctl -u campi -f
+
+[Unit]
+Description=Mouth tracker (camera -> Arduino)
+After=multi-user.target
+
+[Service]
+User=p1plup
+WorkingDirectory=/home/p1plup/cam
+ExecStart=/home/p1plup/cam/venv/bin/python /home/p1plup/cam/camPi.py
+# no preview window when started at boot; run it by hand to get the preview (see notes)
+Environment=PREVIEW=0
+Environment=CAMERA=picam
+# print output straight to the log instead of buffering it
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

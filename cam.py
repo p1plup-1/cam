@@ -26,7 +26,7 @@ try:
     print(f"Connected to Arduino on {ARDUINO_PORT}")
 except serial.SerialException:
     arduino = None
-    print(f"Warning: could not open {ARDUINO_PORT} -- continuing without Arduino")
+    print(f"Warning: could not open {ARDUINO_PORT}")
 
 # init MediaPipe Face Landmarker (468-point face mesh)
 model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "face_landmarker.task")
